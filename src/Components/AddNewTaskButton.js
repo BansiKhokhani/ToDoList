@@ -4,7 +4,7 @@ import { View, StyleSheet, TouchableOpacity, Image } from 'react-native'
 const AddNewTaskButton = () => {
     return (
         <View style={styles.mainWrapper}>
-            <TouchableOpacity>
+            <TouchableOpacity activeOpacity={1}> 
                 <Image source={require('../../assets/icon/AddNewButton.png')} style={styles.image}></Image>
             </TouchableOpacity>
         </View>
