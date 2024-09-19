@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput, Button } from 'react-native'
-import DateSelector from '../Components/DateSelector'
 import uuid from 'react-native-uuid';
 import DatePicker from 'react-native-date-picker'
 import { AddNewToDoListTask, deleteAllTask, getAllTask } from '../RealmSchema/Database';

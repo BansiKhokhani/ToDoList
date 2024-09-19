@@ -74,7 +74,7 @@ const ToDoList = ({ navigation }) => {
   )
 }
 
-export default ToDoList
+export default ToDoList;
 
 const styles = StyleSheet.create({
   mainWrapper: {
