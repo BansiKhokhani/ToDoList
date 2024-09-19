@@ -1,9 +1,9 @@
 import React from 'react'
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native'
-const AddNewTaskButton = () => {
+const AddNewTaskButton = ({navigation}) => {
     return (
         <View style={styles.mainWrapper}>
-            <TouchableOpacity activeOpacity={1}> 
+            <TouchableOpacity activeOpacity={1} onPress={()=>navigation.navigate("AddNewTask")}> 
                 <Image source={require('../../assets/icon/AddNewButton.png')} style={styles.image}></Image>
             </TouchableOpacity>
         </View>
