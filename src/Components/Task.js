@@ -1,25 +1,44 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { deleteSpecificTask, getAllTask, updateSpecificTask } from '../RealmSchema/Database';
 
-const Task = () => {
+const Task = (props) => {
+    const { data, navigation, updateToDoList } = props;
+    const [taskCompleteStatus, setTaskCompleteStatus ] = useState(false);
+
+    const deleteTask = () => {
+        updateToDoList();
+        console.log(getAllTask())
+        deleteSpecificTask(data?.uniqueId);
+
+    }
+    const taskComplete = () => {
+        updateToDoList();
+        setTaskCompleteStatus(prevState => !prevState)
+        updateSpecificTask(data.uniqueId,data.title,data.detail,data.dueDate,true)
+    }
     return (
         <View style={styles.taskWrapperView}>
             <View style={styles.taskWrapperLeftSubView}>
-                <Text style={styles.taskNameTitleText}>TODO TILTE</Text>
-                <Text style={styles.taskNameDueDateText}>Due Date : 12/9/2024</Text>
+                <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate('ToDoListDetail', { data: { ...data, dueDate: data.dueDate.toISOString() } })}>
+                    <Text style={styles.taskNameTitleText}>{data?.title}</Text>
+                    <Text style={styles.taskNameDueDateText}>Due Date : {data?.dueDate?.toLocaleDateString()}</Text>
+                </TouchableOpacity>
             </View>
             <View style={styles.taskWrapperRightSubView}>
-                <TouchableOpacity activeOpacity={1}>
+                <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate('EditTask', { data: { ...data, dueDate: data.dueDate.toISOString() } })}>
                     <Image source={require('../../assets/icon/Pencil.png')} style={styles.image} />
                 </TouchableOpacity >
-                <TouchableOpacity activeOpacity={1}>
+                <TouchableOpacity activeOpacity={1} onPress={deleteTask}>
                     <Image source={require('../../assets/icon/Trash.png')} style={styles.image} />
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={1}>
-                    <Image source={require('../../assets/icon/CheckCircle.png')} style={styles.image} />
+                <TouchableOpacity activeOpacity={1} onPress={taskComplete}>
+                    {taskCompleteStatus ?
+                        (<Image source={require('../../assets/icon/CheckCircle.png')} style={styles.image} />)
+                        :
+                        (<Image source={require('../../assets/icon/UncheckCircle.png')} style={styles.image} />)
+                    }
                 </TouchableOpacity>
-
-
             </View>
 
         </View>
@@ -30,6 +49,7 @@ export default Task
 
 const styles = StyleSheet.create({
     taskWrapperView: {
+        paddingVertical: '5%',
         backgroundColor: '#ffff',
         flex: 0.13,
         margin: '2%',
@@ -48,8 +68,8 @@ const styles = StyleSheet.create({
         // backgroundColor:'yellow', 
         justifyContent: 'space-around',
         paddingRight: '4%',
-        flexDirection:'row',
-        alignItems:'center'
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     taskNameTitleText: {
         color: '#9395D3',
@@ -60,8 +80,10 @@ const styles = StyleSheet.create({
         color: '#bfc0f5',
         fontWeight: 'bold',
     },
-    image:{ 
-        width: 30, height: 30 
+   
+    image: {
+        width: 30, height: 30,
+        tintColor: '#bfc0f5'
     },
-
+   
 })

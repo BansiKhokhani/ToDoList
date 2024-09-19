@@ -1,17 +1,26 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput ,FlatList} from 'react-native'
+import FinishedTask from '../Components/FinishedTask';
+import { getAllTask,getSpecificTask } from '../RealmSchema/Database';
 
-const CompletedTask = () => {
-    const [title, setTitle] = useState('');
-    const [detail, setDetail] = useState('');
 
+const CompletedTask = ({ navigation }) => {
+    const [data, setData] = useState();
+
+    useEffect(() => {
+        setData(getSpecificTask(true))
+    }, [])
+
+    const renderItem = ({ item }) => (
+        <FinishedTask data={item} navigation={navigation}/>
+      );
     return (
         <View style={styles.mainWrapper}>
             {/* ..............header View...................... */}
             <View style={styles.headerView}>
                 <View style={styles.headerSubView}>
                     <View style={styles.headerSubImageView}>
-                        <TouchableOpacity activeOpacity={1}>
+                        <TouchableOpacity activeOpacity={1} onPress={() => navigation.goBack()} >
                             <Image source={require('../../assets/icon/BackButton.png')} style={styles.image} />
                         </TouchableOpacity>
                     </View>
@@ -23,7 +32,11 @@ const CompletedTask = () => {
             </View>
             {/* ............................Body View...................................... */}
             <View style={styles.bodyViewWrapper}>
-                
+                <FlatList
+                    data={data}
+                    renderItem={renderItem}      // Function to render each item
+                    keyExtractor={(item) => item.uniqueId}  // Unique key for each item
+                />
             </View>
         </View>
     )
@@ -64,6 +77,7 @@ const styles = StyleSheet.create({
     },
     bodyViewWrapper: {
         flex: 0.88,
+        backgroundColor: '#B3B7EE', paddingTop: '2%', paddingBottom: '2%'
 
     },
     input: {
@@ -77,13 +91,13 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         fontSize: 17
     },
-    buttonWrapper:{
+    buttonWrapper: {
         marginHorizontal: '5%',
         marginTop: '10%',
-        flexDirection:'row',
-        gap:20
+        flexDirection: 'row',
+        gap: 20
     },
-    buttonSubViewWrapper:{flex:1},
+    buttonSubViewWrapper: { flex: 1 },
     button: {
         paddingVertical: '10%',
         backgroundColor: '#9395D3',

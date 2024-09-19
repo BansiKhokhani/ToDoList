@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
 
-const ToDoListDetail = () => {
-    const [title, setTitle] = useState('');
-    const [detail, setDetail] = useState('');
+const ToDoListDetail = ({ route, navigation }) => {
+    const { data } = route.params;
+    const dt = new Date(data.dueDate);
 
     return (
         <View style={styles.mainWrapper}>
@@ -11,19 +11,34 @@ const ToDoListDetail = () => {
             <View style={styles.headerView}>
                 <View style={styles.headerSubView}>
                     <View style={styles.headerSubImageView}>
-                        <TouchableOpacity activeOpacity={1}>
+                        <TouchableOpacity activeOpacity={1} onPress={() => navigation.goBack()}>
                             <Image source={require('../../assets/icon/BackButton.png')} style={styles.image} />
                         </TouchableOpacity>
                     </View>
                     <View>
-                        <Text style={styles.headerViewText}>Completed Task</Text>
+                        <Text style={styles.headerViewText}>Task Details</Text>
                     </View>
 
                 </View>
             </View>
             {/* ............................Body View...................................... */}
             <View style={styles.bodyViewWrapper}>
-                
+                <View>
+                    <Text style={styles.titleText}>Title:</Text>
+                    <Text style={styles.descriptionText}>{data.title}</Text>
+                </View>
+                <View style={{marginTop:'3%'}}>
+                    <Text style={styles.titleText}>Description:</Text>
+                    <Text style={styles.descriptionText}>{data.detail}{"."}</Text>
+                </View>
+                <View style={{marginTop:'3%',flexDirection:'row',alignItems:'center'}}>
+                    <Text style={styles.titleText}>Due Date:</Text>
+                    <Text style={styles.descriptionText}>{dt.toLocaleDateString()}</Text>
+                </View>
+                <View style={{marginTop:'3%',flexDirection:'row',alignItems:'center'}}>
+                    <Text style={styles.titleText}>Completed Status:</Text>
+                    <Text style={styles.descriptionText}>No</Text>
+                </View>
             </View>
         </View>
     )
@@ -42,7 +57,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     headerSubView: {
-        flex: 0.65,
+        flex: 1 / 2,
         justifyContent: 'space-around',
         paddingBottom: '4%',
         paddingLeft: '1%',
@@ -64,6 +79,8 @@ const styles = StyleSheet.create({
     },
     bodyViewWrapper: {
         flex: 0.88,
+        paddingHorizontal:'5%',
+        paddingTop:'5%',
 
     },
     input: {
@@ -77,13 +94,13 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         fontSize: 17
     },
-    buttonWrapper:{
+    buttonWrapper: {
         marginHorizontal: '5%',
         marginTop: '10%',
-        flexDirection:'row',
-        gap:20
+        flexDirection: 'row',
+        gap: 20
     },
-    buttonSubViewWrapper:{flex:1},
+    buttonSubViewWrapper: { flex: 1 },
     button: {
         paddingVertical: '10%',
         backgroundColor: '#9395D3',
@@ -95,5 +112,15 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         textAlign: 'center',
         color: '#ffff',
+    },
+    titleText: {
+        color: '#9395D3',
+        fontSize:20,
+        fontWeight:'bold'
+    },
+    descriptionText: {
+        color: '#9395D3',
+        fontSize:15,
+        paddingLeft:'5%'
     }
 })

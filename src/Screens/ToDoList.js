@@ -1,10 +1,44 @@
-import React from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState , useCallback } from 'react'
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native'
 import Task from '../Components/Task'
 import AddNewTaskButton from '../Components/AddNewTaskButton'
+import { getAllTask, getSpecificTask } from '../RealmSchema/Database'
+import { useFocusEffect } from '@react-navigation/native';  // Import useFocusEffect
 
 
-const ToDoList = () => {
+const ToDoList = ({ navigation }) => {
+  const [data, setData] = useState(getSpecificTask(false));
+
+
+  const fetchData = () => {
+    const taskData = getSpecificTask(false);
+    setData(taskData);
+    console.log(taskData);
+  };
+
+   // Fetch data when the screen comes into focus
+   useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, []) // Empty dependency array ensures this effect runs only on focus
+  );
+
+  useEffect(()=>{
+    const data=getSpecificTask(false);
+    setData(data)
+    console.log(data)
+  },[])
+
+
+  const handleToDoList=()=>{
+    fetchData();
+  }
+
+  const renderItem = ({ item }) => (
+    <Task navigation={navigation} data={item} updateToDoList={() => handleToDoList()} />
+  );
+
+
   return (
     <View style={styles.mainWrapper}>
       {/* .............................header..................... */}
@@ -15,33 +49,25 @@ const ToDoList = () => {
       </View>
       {/* ..............MiddleView................... */}
       <View style={styles.middleView}>
-        <Task />
-        <Task />
-        <AddNewTaskButton/>
+        <FlatList
+          data={data}
+          renderItem={renderItem}      // Function to render each item
+          keyExtractor={(item) => item.uniqueId}  // Unique key for each item
+        />
+        <AddNewTaskButton navigation={navigation} />
       </View>
       {/* ...................FooterView..................... */}
       <View style={styles.footerView}>
-        <View style={styles.footerSubView}>
-          <View>
-            <TouchableOpacity activeOpacity={1} >
-              <Image source={require('../../assets/icon/Playlist.png')} style={styles.image} />
-            </TouchableOpacity>
-          </View>
-          <View>
-            <Text style={styles.footerSubViewText}>ALL</Text>
-          </View>
 
-        </View>
         <View style={styles.footerSubView}>
-          <View>
-            <TouchableOpacity activeOpacity={1} >
+          <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate('CompletedTask')} style={styles.footerSubViewButton}>
+            <View>
               <Image source={require('../../assets/icon/Tick.png')} style={styles.image} />
-            </TouchableOpacity>
-          </View>
-          <View>
-            <Text style={styles.footerSubViewText}>COMPLETED</Text>
-          </View>
-
+            </View>
+            <View>
+              <Text style={styles.footerSubViewText}>COMPLETED</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -66,7 +92,6 @@ const styles = StyleSheet.create({
   footerView: {
     flex: 0.08,
     backgroundColor: '#ffff',
-    flexDirection: 'row',
   },
   headerSubView: {
     flex: 1,
@@ -83,14 +108,24 @@ const styles = StyleSheet.create({
   footerSubView: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
   },
+  footerSubViewButton: { alignItems: 'center' },
   image: {
-    width: 40, 
+    width: 40,
     height: 40,
-    tintColor:'#9395D3'
+    tintColor: '#9395D3'
   },
-  footerSubViewText:{
-    color:'#9395D3',fontWeight:'600'
-  }
+  footerSubViewText: {
+    color: '#9395D3', fontWeight: '600'
+  },
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 5,
+  },
+  title: {
+    fontSize: 20,
+  },
 })
