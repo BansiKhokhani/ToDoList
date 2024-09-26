@@ -12,9 +12,18 @@ A simple, efficient, and user-friendly **ToDoList application** designed to help
 - **Responsive design**: Optimized for all Mobile.
 - **Data persistence**: Uses [Local Storage-Realm] to store and retrieve tasks.
 
+## Screenshots
+<p align="center">
+  <img src="assets/ScreenShots/Screenshot-1.jpg" width="200" style="margin-right: 10px;">
+  <img src="assets/ScreenShots/Screenshot-2.jpg" width="200" style="margin-left: 10px;">
+  <img src="assets/ScreenShots/Screenshot-4.jpg" width="200" style="margin-left: 10px;">
+  <img src="assets/ScreenShots/Screenshot-5.jpg" width="200" style="margin-left: 10px;">
+</p>
+
 ## Tech Stack
 
 - **Frontend**: React Native
 - **Database**: Realm
 - **Testing Framework**: Jest
+- **Design Tool**: Figma
 
